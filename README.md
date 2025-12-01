@@ -203,3 +203,118 @@ java中，万物皆对象，对象需要创建时，都需要new出来，导致�
 **概念：**一种为访问类提供一个创建一组相关或相互依赖对象的接口，且访问类无需指定所要产品的具体类就能得到同组的不同等级的产品的模式结构
 
 抽象工厂模式使工厂方法模式的升级版本，工厂方法模式只生产一个等级的产品，而抽象工厂模式可生产多个等级的产品
+
+### 模式扩展
+
+**简单工厂+配置文件解除耦合**
+
+在工厂类中加载配置文件的全类名，并创建对象进行存储，客户端如果需要对象，直接进行获取即可。
+
+```java
+public class CoffeeFactory {
+    // 定义容器来存储对象
+    private static Map<String,Coffee> map = new HashMap<>();
+
+    // 加载配置文件，加载一次
+    static {
+        // 创建properties对象
+        Properties p = new Properties();
+        // 调用load方法进行配置文件的加载
+        InputStream is = CoffeeFactory.class.getClassLoader().getResourceAsStream("bean.properties");
+
+        try {
+            p.load(is);
+            // 从p集合获取全类名并获取对象
+            Set<Object> keys = p.keySet();
+            for (Object key : keys) {
+                String className = p.getProperty((String) key);
+                // 通过反射技术创建对象
+                Class clazz = Class.forName(className);
+                Coffee coffee = (Coffee) clazz.newInstance();
+                // 将名称和对象存储到容器中
+                map.put((String) key,coffee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public static Coffee createCoffee(String name){
+        return map.get(name);
+    }
+}
+```
+
+## 原型模式
+
+### 概述
+
+类似于克隆出新对象
+
+### 结构
+
+包含如下角色：
+
+* 抽象原型类：规定`clone()`方法
+* 具体原型类：实现抽象原型类的`clone()`方法，可复制
+* 访问类：使用具体原型类中的`clone()`方法复制新对象
+
+### 实现
+
+克隆分为浅克隆和深克隆
+
+> 浅克隆：创建一个新对象，新对象的属性和原来对象完全相同，对于非基本数据类型，仍指向原有属性所指向的对象的内存地址。
+>
+> 
+>
+> 深克隆：创建一个新对象，属性中引用的其他对象也会被克隆，不在指向原有对象地址。
+
+## 建造者模式
+
+**将一个复杂对象的构建过程与其表示分离**
+
+![image-20251201173331081](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251201173331081.png)
+
+```java
+public static void main(String[] args) {
+        // 创建指挥者对象
+        Director director = new Director(new JavaBuilder());
+        // 让指挥者组装自行车
+        Bike bike = director.construct();
+        System.out.println(bike.getFrame());
+    }
+```
+
+# 结构型模式
+
+结构型模式描述如何将类或对象按某种布局组成更大的结构。
+
+分为 `类结构性模式` 和 `对象结构型模式`,前者采用继承机制来组织接口和类，后者采用组合或聚合来组合对象。
+
+由于组合关系或聚合关系比继承关系耦合度低，满足“合成复用原则”，所以对象结构型模式比类结构性模式具有更大的灵活性。
+
+包含以下7种：
+
+* 代理模式
+* 适配器模式
+* 装饰者模式
+* 桥接模式
+* 外观模式
+* 组合模式
+* 享元模式
+
+## 代理模式
+
+套一层
+
+### 结构
+
+* 抽象主题类
+* 真实主题类
+* 代理类
+
+### 静态代理
+
+静态代理是最简单直观的实现方式，代理类在**编译阶段**就已经被创建。
+
+### JDK动态代理
+

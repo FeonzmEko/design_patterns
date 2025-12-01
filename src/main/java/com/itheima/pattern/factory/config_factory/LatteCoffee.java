@@ -1,4 +1,4 @@
-package com.itheima.factory.factory_method;
+package com.itheima.pattern.factory.config_factory;
 
 public class LatteCoffee extends Coffee {
     @Override

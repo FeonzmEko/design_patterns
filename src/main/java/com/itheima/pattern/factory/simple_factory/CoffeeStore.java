@@ -1,4 +1,4 @@
-package com.itheima.factory.simple_factory;
+package com.itheima.pattern.factory.simple_factory;
 
 public class CoffeeStore {
     public Coffee orederCoffee(String type){
