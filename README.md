@@ -318,3 +318,91 @@ public static void main(String[] args) {
 
 ### JDK动态代理
 
+```java
+public SellTickets getProxyObject(){
+    SellTickets proxyObject = (SellTickets) Proxy.newProxyInstance(
+        station.getClass().getClassLoader(),
+        station.getClass().getInterfaces(),
+        new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println("代售点收取一定的服务费用（jdk动态代理）");
+                Object obj = method.invoke(station,args);
+
+                return obj;
+            }
+        }
+    );
+    return proxyObject;
+}
+```
+
+这段代码通过 `Proxy.newProxyInstance()` 方法，**在运行时**动态地创建了一个代理对象 `proxyObject`。这个代理对象和目标对象 `TrainStation` 一样，都实现了 `SellTickets` 接口。当您调用代理对象的 `sell()` 方法时，实际上执行的是 `InvocationHandler` 里的逻辑。
+
+### CGLIB动态代理
+
+在没有定义接口的情况下，无法使用jdk动态代理
+
+CGLIB功能强大，为GDK动态代理提供了很好的补充
+
+### 三种代理方式对比
+
+* jdk && cglib
+  * 有接口使用jdk，没接口使用cglib
+* 动态代理 && 静态代理
+  * 一般使用动态代理
+
+### 优缺点
+
+**优点**
+
+* 中介，保护目标对象
+* 扩展目标对象功能
+* 降低系统耦合度
+
+**缺点**
+
+* 增加了系统复杂度
+
+## 适配器模式
+
+> 将一个类的接口转换成客户希望的另一个接口，使得原本由于接口不兼容而不能一起工作的那些类能一起工作。
+
+### 结构
+
+* 目标接口
+* 适配者类
+* 适配器类
+
+### 类适配器模式
+
+![image-20251203210826711](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251203210826711.png)
+
+思考：当不提供规范接口时候，则无法实现适配器
+
+### 对象适配器模式
+
+不再局限于是否提供规范接口
+
+```java
+public class SDAdapterTF extends SDCardImpl {
+    private TFCard tfCard = new TFCardImpl();
+
+    @Override
+    public String readSD() {
+        System.out.println("adapter read tf card");
+        return tfCard.readTF();
+    }
+
+    @Override
+    public void writeSD(String msg) {
+        System.out.println("adapter write tf card");
+        tfCard.writeTF(msg);
+    }
+}
+```
+
+### 应用场景
+
+* 兼容旧系统
+* 使用第三方提供的组件，但组件接口定义和自己要求的接口定义不同
