@@ -705,3 +705,29 @@ public static void main(String[] args) {
 ![image-20251205180155588](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251205180155588.png)
 
 > 在开发中使用迭代器模式，只需让自己的容器实现java.util.Iterable并实现其中的iterator()方法使其返回一个java.util.Iterator的实现类就可以了
+
+## 访问者模式
+
+定义：
+
+封装一些作用于某种数据结构中的个元素的操作，可以在不改变该数据结构的前提下定义作用于这些元素的新的操作。
+
+## 备忘录模式
+
+提供了一种撤销机制，可以恢复到之前的状态。
+
+### 结构
+
+* 发起人角色：记录内部状态信息
+* 备忘录角色：存储发起人的内部状态
+* 管理者角色：对备忘录进行管理，保存与获取备忘录功能，但不能对备忘录的内容进行访问与修改。
+
+![image-20251206153212580](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251206153212580.png)
+
+## 解释器模式
+
+定义：
+
+> 给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该表示来解释语言中的句子。
+
+![image-20251206161802654](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251206161802654.png)
