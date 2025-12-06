@@ -576,3 +576,132 @@ eg：电脑的电源键就是一个外观
 * 调用者/请求者角色：Waiter
 
 ![image-20251204210640748](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251204210640748.png)
+
+## 责任链模式
+
+定义：
+
+避免请求发送者与多个请求处理者耦合在一起，将所欲请求的处理者通过前一对象记住下一个对象的引用而连成一条链，当有请求发生时，可将请求沿着这条链传递，直到有对象处理它为止
+
+```java
+public static void main(String[] args) {
+    // 一个请假条对象
+    LeaveRequest leave = new LeaveRequest("小明",9,"抱恙");
+
+    // 各级领导对象
+    GroupLeader groupLeader = new GroupLeader();
+    Manager manager = new Manager();
+    GeneralManager generalManager = new GeneralManager();
+
+    // 设置职责链
+    groupLeader.setNextHandler(manager);
+    manager.setNextHandler(generalManager);
+
+    // 自底向上进行提交审批
+    groupLeader.submit(leave);
+}
+```
+
+形成职责链：
+
+> groupLeader --> manager --> generalManager
+
+### 优缺点
+
+**优点：**
+
+* 降低对象之间的耦合度
+* 增强系统的可扩展性
+* 增强了给对象指派职责的灵活性
+* 简化对象间的连接
+* 责任分担
+
+**缺点：**
+
+* 不能保证每个请求都被处理
+* 较长的职责链可能影响性能
+
+## 状态模式
+
+把有状态的对象，把复杂的逻辑判断提取到不同的对象中，允许状态对象在其内部状态发生改变时改变其行为
+
+### 结构
+
+* 环境角色：也称为上下文，维护状态用的
+* 抽象状态角色
+* 具体状态角色
+
+![image-20251205152617168](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251205152617168.png)
+
+## 观察者模式
+
+定义：
+
+又被称为`发布-订阅`(Publish/Subscribe)模式，它定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态变化时，会通知所有的观察者对象，使他们能够自动更新自己。
+
+### 结构
+
+**Subject（抽象主题/可观察者）**：
+
+- 提供一个接口，用于**注册**（`attach`）、**删除**（`detach`）观察者对象。
+- 提供一个接口，用于**通知**（`notify`）所有已注册的观察者。
+
+**ConcreteSubject（具体主题）**：
+
+- 维护自身状态。
+- 状态发生变化时，负责调用 `notify` 方法通知所有观察者。
+
+**Observer（抽象观察者）**：
+
+- 定义一个更新接口（`update`），用于在主题状态发生变化时接收通知并更新自身。
+
+**ConcreteObserver（具体观察者）**：
+
+- 实现抽象观察者的 `update` 接口。
+- 在接到主题通知后，执行相应的业务逻辑。通常会调用具体主题的方法来获取最新的状态信息。
+
+### 优缺点
+
+1. 优点
+   * 降低了目标与观察者之间的耦合关系，两者是抽象耦合关系
+   * 被观察者发送通知，所有注册的观察者都会收到信息
+2. 缺点
+   * 观察者过多，耗时较长
+   * 循环依赖问题
+
+### 场景
+
+* 一对多的关系
+* 抽象模型有两个方面，一个依赖另一个
+
+## 中介者模式
+
+![image-20251205163736443](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251205163736443.png)
+
+定义：
+
+又叫调停模式，定义一个中介角色来封装一系列对象之间的交互，使原有对象之间的耦合松散，且可以独立地改变他们之间的交互。
+
+### 结构
+
+* 抽象中介者角色
+* 具体中介者角色
+* 抽象同事类角色
+* 具体同事类角色
+
+## 迭代器模式
+
+定义：
+
+提供一个对象来顺序访问聚合对象中的一系列数据，而不暴露聚合对象的内部表示。
+
+### 结构
+
+* 抽象聚合角色
+* 具体聚合角色
+* 抽象迭代器角色
+* 具体迭代器角色
+
+![image-20251205180155588](C:\Users\Qingfeng\AppData\Roaming\Typora\typora-user-images\image-20251205180155588.png)
+
+> 在开发中使用迭代器模式，只需让自己的容器实现java.util.Iterable并实现其中的iterator()方法使其返回一个java.util.Iterator的实现类就可以了
